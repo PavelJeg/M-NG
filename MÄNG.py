@@ -82,8 +82,3 @@ while True:
     if play_again.lower() != "+":
         break
 
-
-    import random
-import tkinter as tk
-
-
