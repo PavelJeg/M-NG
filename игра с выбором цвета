@@ -61,3 +61,88 @@ result_label.grid(row=2, column=1)
 play_again_button = tk.Button(window, text="mängi uuesti", command=reset_game)
 
 window.mainloop()
+
+
+
++счёт
+
+import random
+import tkinter as tk
+from tkinter import colorchooser
+
+window = tk.Tk()
+window.title("Kivi, paber, käärid")
+
+# создание переменной для отслеживания баллов игрока
+player_score = tk.IntVar()
+player_score.set(0)
+
+def play_game(user_choice):
+    global player_score  # используем глобальную переменную для изменения значения баллов игрока
+    possible_actions = ["kivi", "paber", "käärid"]
+    computer_choice = random.choice(possible_actions)
+    result_text.set(f"Sina valisid {user_choice}, arvuti valis {computer_choice}.\n")
+
+    if user_choice == computer_choice:
+        result_text.set(result_text.get() + "Viik!")
+    elif user_choice == "kivi":
+        if computer_choice == "Käärid":
+            result_text.set(result_text.get() + "Kivi lööb käärid! Sa oled võitnud!")
+            player_score.set(player_score.get() + 1)  # увеличиваем баллы игрока на 1
+        else:
+            result_text.set(result_text.get() + "Paber võidab kivi! Sa kaotasid.")
+    elif user_choice == "Paber":
+        if computer_choice == "Kivi":
+            result_text.set(result_text.get() + "Paber võidab kivi! Sa oled võitnud!")
+            player_score.set(player_score.get() + 1)  # увеличиваем баллы игрока на 1
+        else:
+            result_text.set(result_text.get() + "Käärid lõikavad paberit! Sa kaotasid.")
+    elif user_choice == "Käärid":
+        if computer_choice == "Paber":
+            result_text.set(result_text.get() + "Käärid lõikavad paberit! Sa oled võitnud!")
+            player_score.set(player_score.get() + 1)  # увеличиваем баллы игрока на 1
+        else:
+            result_text.set(result_text.get() + "Kivi lööb käärid! Sa kaotasid.")
+
+    score_label.config(text=f"Baalid: {player_score.get()}")
+
+    play_again_button.grid(row=3, column=1)
+
+def reset_game():
+    result_text.set("")
+    play_again_button.grid_forget()
+
+def choose_color():
+    color = colorchooser.askcolor()[1]
+    if color:
+        window.configure(bg=color)
+
+choices_frame = tk.Frame(window)
+choices_frame.grid(row=1, column=1)
+
+rock_button = tk.Button(choices_frame, text="Kivi", command=lambda: play_game("kivi"))
+rock_button.pack(side=tk.LEFT, padx=5)
+
+paper_button = tk.Button(choices_frame, text="Paber", command=lambda: play_game("paber"))
+paper_button.pack(side=tk.RIGHT, padx=5)
+
+scissors_button = tk.Button(choices_frame, text="Käärid", command=lambda: play_game("käärid"))
+scissors_button.pack(side=tk.RIGHT, padx=5)
+
+result_frame = tk.Frame(window)
+result_frame.grid(row=2, column=1)
+
+result_text = tk.StringVar()
+result_label = tk.Label(result_frame, textvariable=result_text)
+result_label.pack()
+
+score_label = tk.Label(result_frame, text="Baalid: 0")
+score_label.pack()
+
+play_again_button = tk.Button(result_frame, text="Mängi uuesti", command=reset_game)
+
+color_button = tk.Button(window, text="Vali taustavärv", command=choose_color)
+color_button.grid(row=3, column=1)
+
+window.mainloop()
+
